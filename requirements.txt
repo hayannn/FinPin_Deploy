@@ -13,4 +13,5 @@ beautifulsoup4==4.12.3
 
 spacy>=3.0.0
 https://github.com/explosion/spacy-models/releases/download/ko_core_news_sm-3.5.0/ko_core_news_sm-3.5.0-py3-none-any.whl
-pysqlite3
+
+pysqlite3-binary
