@@ -105,6 +105,43 @@ predefined_keywords = [
 #     else:
 #         return None
 
+# HTML 태그를 제거하는 함수
+def clean_html(text):
+    """HTML 태그를 제거합니다."""
+    soup = BeautifulSoup(text, "html.parser")
+    return soup.get_text()
+
+# 한국어 키워드 추출 함수
+def extract_korean_keywords(text):
+    # 한국어 키워드 추출 로직을 여기에 작성
+    korean_keywords = []
+    # 예시: 한국어 키워드 목록에 맞춰 추가
+    korean_keyword_list = ['금융', '주식', '경제', '금리', '증시']
+    for keyword in korean_keyword_list:
+        if keyword in text:
+            korean_keywords.append(keyword)
+    return korean_keywords
+
+# 영어 키워드 추출 함수
+def extract_english_keywords(text):
+    # 영어 키워드 추출 로직을 여기에 작성
+    english_keywords = []
+    # 예시: 영어 키워드 목록에 맞춰 추가
+    english_keyword_list = ['ETF', 'stock', 'economy', 'interest', 'market']
+    for keyword in english_keyword_list:
+        if keyword.lower() in text.lower():
+            english_keywords.append(keyword)
+    return english_keywords
+
+# 혼합된 언어에서 키워드 추출
+def extract_keywords(text):
+    korean_keywords = extract_korean_keywords(text)
+    english_keywords = extract_english_keywords(text)
+    
+    # 중복된 키워드 제거 후 합침
+    return list(set(korean_keywords + english_keywords))
+
+
 # 날짜 추출 함수
 def extract_date(text):
     if not isinstance(text, str):
@@ -140,42 +177,6 @@ def extract_date(text):
     
     return None
 
-
-# HTML 태그를 제거하는 함수
-def clean_html(text):
-    """HTML 태그를 제거합니다."""
-    soup = BeautifulSoup(text, "html.parser")
-    return soup.get_text()
-
-# 한국어 키워드 추출 함수
-def extract_korean_keywords(text):
-    # 한국어 키워드 추출 로직을 여기에 작성
-    korean_keywords = []
-    # 예시: 한국어 키워드 목록에 맞춰 추가
-    korean_keyword_list = ['ETF', '주식', '경제', '금리', '증시']
-    for keyword in korean_keyword_list:
-        if keyword in text:
-            korean_keywords.append(keyword)
-    return korean_keywords
-
-# 영어 키워드 추출 함수
-def extract_english_keywords(text):
-    # 영어 키워드 추출 로직을 여기에 작성
-    english_keywords = []
-    # 예시: 영어 키워드 목록에 맞춰 추가
-    english_keyword_list = ['ETF', 'stock', 'economy', 'interest', 'market']
-    for keyword in english_keyword_list:
-        if keyword.lower() in text.lower():
-            english_keywords.append(keyword)
-    return english_keywords
-
-# 혼합된 언어에서 키워드 추출
-def extract_keywords(text):
-    korean_keywords = extract_korean_keywords(text)
-    english_keywords = extract_english_keywords(text)
-    
-    # 중복된 키워드 제거 후 합침
-    return list(set(korean_keywords + english_keywords))
 
 # 기사 내용을 청크로 나누는 함수
 def chunk_text(text, chunk_size=1000):
