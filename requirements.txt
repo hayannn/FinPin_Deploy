@@ -4,7 +4,7 @@ langchain-community
 
 openai
 langchain-openai
-chromadb
+chromadb==0.3.8
 langchain_chroma
 requests
 
