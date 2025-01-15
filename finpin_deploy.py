@@ -15,7 +15,7 @@ from transformers import BertForSequenceClassification
 from spacy.matcher import PhraseMatcher
 import subprocess
 
-# from langchain_chroma import Chroma
+from langchain_chroma import Chroma
 os.environ["OPENAI_API_KEY"] = st.secrets['OPENAI_API_KEY']
 
 embedding_model = OpenAIEmbeddings(model="text-embedding-ada-002")
