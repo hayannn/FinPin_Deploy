@@ -46,7 +46,7 @@ user_input = st.chat_input("질문을 입력해주세요🙂(ex.2025년 1월 13�
 try:
     nlp = spacy.load("ko_core_news_sm")
 except IOError:
-    !python -m spacy download ko_core_news_sm
+    python -m spacy download ko_core_news_sm
     nlp = spacy.load("ko_core_news_sm")
 
 # 특정 키워드 리스트
