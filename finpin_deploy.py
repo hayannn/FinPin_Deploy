@@ -14,7 +14,6 @@ from transformers import BertTokenizer, BertForTokenClassification, pipeline
 from transformers import BertForSequenceClassification
 from spacy.matcher import PhraseMatcher
 import subprocess
-import langid
 
 __import__('pysqlite3')
 import sys
