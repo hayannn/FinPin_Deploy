@@ -10,8 +10,7 @@ from dotenv import load_dotenv
 from datetime import datetime
 from bs4 import BeautifulSoup
 import re
-import spacy
-from spacy.matcher import PhraseMatcher
+from transformers import BertTokenizer, BertForTokenClassification, pipeline
 import subprocess
 
 # from langchain_chroma import Chroma
@@ -41,12 +40,12 @@ for msg in st.session_state.messages:
 # 사용자 입력
 user_input = st.chat_input("질문을 입력해주세요🙂(ex.2025년 1월 13일의 금융 뉴스를 알려줄래?, 최신 금융 동향을 알려줘, ...)")
 
-# spaCy 모델 로드 (한국어)
-try:
-    nlp = spacy.load("ko_core_news_sm")
-except IOError:
-    subprocess.run(["python", "-m", "spacy", "download", "ko_core_news_sm"])
-    nlp = spacy.load("ko_core_news_sm")
+# spaCy 모델 로드 (한국어) -> streamlit cloud에서 배포 가능한 Korean Hugging Face BERT 모델로 변경하여 로드 (한국어 모델)
+tokenizer = BertTokenizer.from_pretrained('monologg/kobert')
+model = BertForTokenClassification.from_pretrained('monologg/kobert')
+
+# 텍스트 분류 파이프라인 초기화
+nlp = pipeline('ner', model=model, tokenizer=tokenizer)
 
 # 특정 키워드 리스트
 predefined_keywords = [
@@ -73,21 +72,10 @@ predefined_keywords = [
 # 사용자 입력에서 키워드를 추출하는 함수
 def extract_keyword(text):
     """사용자 입력에서 키워드를 추출합니다."""
-    doc = nlp(text)
-    
-    # PhraseMatcher를 사용하여 미리 정의된 키워드를 문장에서 찾기
-    matcher = PhraseMatcher(nlp.vocab)
-    patterns = [nlp.make_doc(keyword) for keyword in predefined_keywords]
-    matcher.add("PredefinedKeywords", patterns)
-
-    matches = matcher(doc)
-    matched_keywords = [doc[start:end].text for _, start, end in matches]
-
-    # 키워드가 있으면 추출하고, 없으면 None 반환
-    if matched_keywords:
-        return matched_keywords[0]  # 첫번째 키워드만 반환
-    else:
-        return None
+    # NER을 통해 문장에서 명명된 엔티티(키워드) 추출
+    entities = nlp(text)
+    keywords = [entity['word'] for entity in entities]
+    return keywords
 
 
 # 날짜 추출 함수
