@@ -84,7 +84,7 @@ def extract_keyword(text):
     
     # NER 결과에서 키워드 추출
     for entity in doc:
-        if entity['word'] in predefined_keywords:
+        if 'word' in entity and entity['word'] in predefined_keywords:
             matched_keywords.append(entity['word'])
 
     # 키워드가 있으면 추출하고, 없으면 None 반환
