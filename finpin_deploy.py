@@ -18,7 +18,7 @@ from spacy.matcher import PhraseMatcher
 # from langchain_chroma import Chroma
 os.environ["OPENAI_API_KEY"] = st.secrets['OPENAI_API_KEY']
 
-embedding_model = OpenAIEmbeddings(model="text-embedding-ada-002", api_key=OPENAI_API_KEY)
+embedding_model = OpenAIEmbeddings(model="text-embedding-ada-002")
 llm = ChatOpenAI(model="gpt-4o-mini", api_key=OPENAI_API_KEY)
 
 persist_directory = "./chroma_db"
