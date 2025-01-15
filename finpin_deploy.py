@@ -114,23 +114,17 @@ def extract_keyword(text):
     
     # 한국어인 경우
     if lang == 'ko':
-        doc = ko_nlp(text)  # 한국어 모델을 사용하여 NER을 수행합니다.
+        doc = ko_nlp(text)  # 한국어 모델을 사용하여 NER을 수행
+        matched_keywords = [entity['word'] for entity in doc if entity['word'] in predefined_keywords]
+    
     # 영어인 경우
     elif lang == 'en':
-        doc = en_nlp(text)  # 영어 모델을 사용하여 NER을 수행합니다.
-    else:
-        return None  # 다른 언어는 지원하지 않음
+        doc = en_nlp(text)  # 영어 모델을 사용하여 NER을 수행
+        matched_keywords = [entity['word'] for entity in doc if entity['word'] in predefined_keywords]
     
-    matched_keywords = []
-    
-    # NER 결과에서 키워드 추출
-    for entity in doc:
-        if 'word' in entity and entity['word'] in predefined_keywords:
-            matched_keywords.append(entity['word'])
-
-    # 키워드가 있으면 추출하고, 없으면 None 반환
+    # 키워드가 있으면 반환, 없으면 None
     if matched_keywords:
-        return matched_keywords  # 모든 키워드를 반환
+        return matched_keywords
     else:
         return None
 
