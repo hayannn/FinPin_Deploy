@@ -5,6 +5,7 @@ langchain-community
 openai
 langchain-openai
 langchain-chroma
+chromadb
 requests
 
 python-dotenv
