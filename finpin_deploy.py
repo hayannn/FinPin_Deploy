@@ -72,10 +72,21 @@ predefined_keywords = [
 # 사용자 입력에서 키워드를 추출하는 함수
 def extract_keyword(text):
     """사용자 입력에서 키워드를 추출합니다."""
-    # NER을 통해 문장에서 명명된 엔티티(키워드) 추출
-    entities = nlp(text)
-    keywords = [entity['word'] for entity in entities]
-    return keywords
+    doc = nlp(text)
+    
+    # PhraseMatcher를 사용하여 미리 정의된 키워드를 문장에서 찾기
+    matcher = PhraseMatcher(nlp.vocab)
+    patterns = [nlp.make_doc(keyword) for keyword in predefined_keywords]
+    matcher.add("PredefinedKeywords", patterns)
+
+    matches = matcher(doc)
+    matched_keywords = [doc[start:end].text for _, start, end in matches]
+
+    # 키워드가 있으면 추출하고, 없으면 None 반환
+    if matched_keywords:
+        return matched_keywords[0]  # 첫번째 키워드만 반환
+    else:
+        return None
 
 
 # 날짜 추출 함수
