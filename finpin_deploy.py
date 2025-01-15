@@ -137,7 +137,9 @@ def extract_english_keywords(text):
 def extract_keywords(text):
     korean_keywords = extract_korean_keywords(text)
     english_keywords = extract_english_keywords(text)
-    return korean_keywords + english_keywords
+    
+    # 중복된 키워드 제거 후 합침
+    return list(set(korean_keywords + english_keywords))
 
 # 날짜 추출 함수
 def extract_date(text):
