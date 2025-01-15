@@ -11,5 +11,4 @@ python-dotenv
 beautifulsoup4
 
 spacy>=3.0.0
-ko-core-news-sm
 pysqlite3-binary
