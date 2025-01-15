@@ -231,6 +231,7 @@ if user_input:
                 # 챗봇 형식의 응답 출력
                 st.session_state.messages.append({"role": "assistant", "content": answer})
 
+
                 # 제목, 날짜, 요약, 출처 출력
                 for title, summary, source, date in zip(titles, summaries, sources, dates):
                     combined_message = f"""
