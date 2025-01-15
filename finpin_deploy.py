@@ -12,8 +12,7 @@ from bs4 import BeautifulSoup
 import re
 import spacy
 from spacy.matcher import PhraseMatcher
-
-
+import subprocess
 
 # from langchain_chroma import Chroma
 os.environ["OPENAI_API_KEY"] = st.secrets['OPENAI_API_KEY']
