@@ -52,7 +52,7 @@ tokenizer = BertTokenizer.from_pretrained('monologg/kobert')
 model = BertForTokenClassification.from_pretrained('monologg/kobert')
 
 # 텍스트 분류 파이프라인 초기화
-ko_nlp = pipeline('ner', model=model, tokenizer=tokenizer)
+ko_nlp = pipeline('ner', model=ko_model, tokenizer=ko_tokenizer)
 
 # 영어 단어 인식이 잘 되지 않는 점을 보완하기 위해 다국어 모델로 변경 시도 -> 성능이 더 떨어지는 이슈가 있었음)
 # tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
