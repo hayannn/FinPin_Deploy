@@ -50,13 +50,19 @@ user_input = st.chat_input("질문을 입력해주세요🙂(ex.2025년 1월 13�
 tokenizer = BertTokenizer.from_pretrained('monologg/kobert')
 model = BertForTokenClassification.from_pretrained('monologg/kobert')
 
+# 텍스트 분류 파이프라인 초기화
+ko_nlp = pipeline('ner', model=model, tokenizer=tokenizer)
+
 # 영어 단어 인식이 잘 되지 않는 점을 보완하기 위해 다국어 모델로 변경 시도 -> 성능이 더 떨어지는 이슈가 있었음)
 # tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
 # model = BertForTokenClassification.from_pretrained('bert-base-multilingual-cased')
 
+# 영어 모델 로드(영어 특화 모델로 보완하기 위함)
+en_tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+en_model = BertForTokenClassification.from_pretrained('bert-base-uncased')
 
 # 텍스트 분류 파이프라인 초기화
-nlp = pipeline('ner', model=model, tokenizer=tokenizer)
+en_nlp = pipeline('ner', model=en_model, tokenizer=en_tokenizer)
 
 # 특정 키워드 리스트
 predefined_keywords = [
@@ -80,10 +86,39 @@ predefined_keywords = [
 ]
 
 
+# # 사용자 입력에서 키워드를 추출하는 함수
+# def extract_keyword(text):
+#     """사용자 입력에서 키워드를 추출합니다."""
+#     doc = nlp(text)  # 텍스트에서 NER을 수행합니다.
+    
+#     matched_keywords = []
+    
+#     # NER 결과에서 키워드 추출
+#     for entity in doc:
+#         if 'word' in entity and entity['word'] in predefined_keywords:
+#             matched_keywords.append(entity['word'])
+
+#     # 키워드가 있으면 추출하고, 없으면 None 반환
+#     if matched_keywords:
+#         return matched_keywords  # 모든 키워드를 반환
+#     else:
+#         return None
+
 # 사용자 입력에서 키워드를 추출하는 함수
 def extract_keyword(text):
     """사용자 입력에서 키워드를 추출합니다."""
-    doc = nlp(text)  # 텍스트에서 NER을 수행합니다.
+    
+    # 언어 감지 (영어/한국어)
+    lang, _ = langid.classify(text)
+    
+    # 한국어인 경우
+    if lang == 'ko':
+        doc = ko_nlp(text)  # 한국어 모델을 사용하여 NER을 수행합니다.
+    # 영어인 경우
+    elif lang == 'en':
+        doc = en_nlp(text)  # 영어 모델을 사용하여 NER을 수행합니다.
+    else:
+        return None  # 다른 언어는 지원하지 않음
     
     matched_keywords = []
     
