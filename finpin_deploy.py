@@ -244,7 +244,7 @@ if user_input:
                     </div>
                     """
 
-                st.session_state.messages.append({"role": "assistant", "content": combined_message})
+                    st.session_state.messages.append({"role": "assistant", "content": combined_message})
 
         except Exception as e:
             st.error(f"뉴스를 가져오는 중 오류가 발생했습니다: {e}")
