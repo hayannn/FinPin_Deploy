@@ -11,6 +11,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 import re
 from transformers import BertTokenizer, BertForTokenClassification, pipeline
+from spacy.matcher import PhraseMatcher
 import subprocess
 
 # from langchain_chroma import Chroma
