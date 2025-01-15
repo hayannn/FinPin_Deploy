@@ -13,9 +13,7 @@ import re
 import spacy
 from spacy.matcher import PhraseMatcher
 
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 
 from langchain_chroma import Chroma
 os.environ["OPENAI_API_KEY"] = st.secrets['OPENAI_API_KEY']
