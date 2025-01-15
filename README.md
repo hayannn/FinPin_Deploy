@@ -1,20 +1,19 @@
 # FinPin_Deploy
-spaCy(ko_core_news_sm) 모델을 Streamlit Cloud 환경에서 적용하려 했으나, 모델을 찾을 수 없다는 에러 발생 ➡️ 한국어 BERT 모델과 영어 BERT 모델을 각각 사용하여 키워드를 감지하는 방식으로 알고리즘 변경
+### 🔗 사이트 : https://finpindeploy.streamlit.app/
 ![image](https://github.com/user-attachments/assets/0509aff3-49a7-43db-b81c-d7aec34fbe87)
 
+<br>
+<br>
+
+### 기술 스택 변경 사항
+- spaCy(ko_core_news_sm) 모델 ➡️ 한국어 BERT 모델과 영어 BERT 모델을 각각 사용하여 키워드를 감지하는 방식으로 알고리즘 변경
+  - Streamlit Cloud 환경에 적용하려 했으나, 모델을 찾을 수 없다는 에러가 발생했고, spaCy의 경우 requirements.txt로 라이브러리를 다운받는 Streamlit Cloud에서 수동 설치가 불가능하여 대체 
 
 <br>
 <br>
 
-## 접속 사이트
-https://finpindeploy.streamlit.app/
-
-
-
-<br>
-<br>
-
-### Before
+### 코드 변경 사항
+#### Before
 - spaCy의 한 종류인 한국어 특화 모델인 ko_core_news_sm 사용
 - 특정 키워드 리스트는 한국어와 영어를 혼재하여 제작
 - 사용자 입력에서 키워드 추출
@@ -103,7 +102,7 @@ def extract_date(text):
 <br>
 
 
-### After
+#### After
 - spaCy의 한 종류인 한국어 특화 모델인 ko_core_news_sm 사용
 - 특정 키워드 리스트를 한국어와 영어로 "나누어" 제작
 - 한국어일 경우 한국어 리스트로, 영어일 경우 영어 리스트로 나누어 조건문이 실행됨
@@ -205,7 +204,7 @@ def extract_date(text):
 <br>
 <br>
 
-## 추후 작업
+### 추후 작업
 - 코드 리팩토링 필수!
 - 프롬프트 템플릿 적용
 - 페르소나 시나리오 빌드업
@@ -214,6 +213,6 @@ def extract_date(text):
 <br>
 <br>
 
-## 현재 문제 상황(25/01/16 am.12:20)
+### 현재 문제 상황(25/01/16 am.12:20)
 - 새로운 답변 제공 시, 이전 답변의 HTML 코드 설정이 그대로 노출되고 있음.
 - ⚙️ 새로운 질문 후 답변 제공 시점에 그 이전의 답변을 삭제하는 방향으로 수정중
