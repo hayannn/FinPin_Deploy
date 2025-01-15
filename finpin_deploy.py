@@ -105,6 +105,12 @@ predefined_keywords = [
 #     else:
 #         return None
 
+# HTML 태그를 제거하는 함수
+def clean_html(text):
+    """HTML 태그를 제거합니다."""
+    soup = BeautifulSoup(text, "html.parser")
+    return soup.get_text()
+
 # 한국어 키워드 추출 함수
 def extract_korean_keywords(text):
     # 한국어 키워드 추출 로직을 여기에 작성
@@ -167,6 +173,12 @@ def extract_date(text):
                 continue
     
     return None
+
+# 기사 내용을 청크로 나누는 함수
+def chunk_text(text, chunk_size=1000):
+    """기사 내용을 1000자 이하로 청크로 나눕니다."""
+    chunks = [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
+    return chunks
 
 # 뉴스 검색 및 처리
 if user_input:
