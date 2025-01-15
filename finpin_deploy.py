@@ -105,37 +105,37 @@ predefined_keywords = [
 #     else:
 #         return None
 
-# 사용자 입력에서 키워드를 추출하는 함수
-def extract_keyword(text):
-    """사용자 입력에서 키워드를 추출합니다."""
-    
-    # 언어 감지 (영어/한국어)
-    lang, _ = langid.classify(text)
-    
-    # 한국어인 경우
-    if lang == 'ko':
-        doc = ko_nlp(text)  # 한국어 모델을 사용하여 NER을 수행
-        matched_keywords = [entity['word'] for entity in doc if entity['word'] in predefined_keywords]
-    
-    # 영어인 경우
-    elif lang == 'en':
-        doc = en_nlp(text)  # 영어 모델을 사용하여 NER을 수행
-        matched_keywords = [entity['word'] for entity in doc if entity['word'] in predefined_keywords]
-    
-    # 키워드가 있으면 반환, 없으면 None
-    if matched_keywords:
-        return matched_keywords
-    else:
-        return None
+# 한국어 키워드 추출 함수
+def extract_korean_keywords(text):
+    # 한국어 키워드 추출 로직을 여기에 작성
+    korean_keywords = []
+    # 예시: 한국어 키워드 목록에 맞춰 추가
+    korean_keyword_list = ['ETF', '주식', '경제', '금리', '증시']
+    for keyword in korean_keyword_list:
+        if keyword in text:
+            korean_keywords.append(keyword)
+    return korean_keywords
+
+# 영어 키워드 추출 함수
+def extract_english_keywords(text):
+    # 영어 키워드 추출 로직을 여기에 작성
+    english_keywords = []
+    # 예시: 영어 키워드 목록에 맞춰 추가
+    english_keyword_list = ['ETF', 'stock', 'economy', 'interest', 'market']
+    for keyword in english_keyword_list:
+        if keyword.lower() in text.lower():
+            english_keywords.append(keyword)
+    return english_keywords
+
+# 혼합된 언어에서 키워드 추출
+def extract_keywords(text):
+    korean_keywords = extract_korean_keywords(text)
+    english_keywords = extract_english_keywords(text)
+    return korean_keywords + english_keywords
 
 # 날짜 추출 함수
 def extract_date(text):
-    """
-    입력된 텍스트에서 날짜를 추출합니다.
-    - "YYYY년 MM월 DD일", "MM월 DD일", "DD일", "오늘" 등의 다양한 형식 지원
-    - 형식이 없으면 None 반환
-    """
-    if not isinstance(text, str):  # text가 문자열인지 확인
+    if not isinstance(text, str):
         return None
 
     today = datetime.today()
@@ -164,38 +164,24 @@ def extract_date(text):
                 else:  # YYYY년 MM월 DD일 형식
                     return datetime.strptime(match.group(), date_format)
             except ValueError:
-                # 유효하지 않은 날짜일 경우 무시
                 continue
     
     return None
 
-# HTML 태그를 제거하는 함수
-def clean_html(text):
-    """HTML 태그를 제거합니다."""
-    soup = BeautifulSoup(text, "html.parser")
-    return soup.get_text()
-
-
-# 기사 내용을 청크로 나누는 함수
-def chunk_text(text, chunk_size=1000):
-    """기사 내용을 1000자 이하로 청크로 나눕니다."""
-    chunks = [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
-    return chunks
-
-
+# 뉴스 검색 및 처리
 if user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
 
     # 날짜와 키워드 추출
     date = extract_date(user_input)
-    keyword = extract_keyword(user_input)
+    keywords = extract_keywords(user_input)  # 한국어와 영어 키워드를 모두 추출
 
     # 기본 쿼리
-    query = user_input if not keyword else keyword
+    query = user_input if not keywords else ' '.join(keywords)
 
     # 날짜가 있으면 쿼리에 포함
     if date:
-        query = f"{query} {date.strftime('%Y-%m-%d')}" # 날짜를 쿼리에 포함
+        query = f"{query} {date.strftime('%Y-%m-%d')}"  # 날짜를 쿼리에 포함
 
     with st.spinner("네이버에서 뉴스 가져오는 중..."):
         try:
@@ -213,7 +199,6 @@ if user_input:
                 filtered_news = news_items
 
             if not filtered_news:
-                # st.warning("지정된 날짜나 쿼리에 맞는 뉴스가 없습니다.")
                 st.session_state.messages.append({"role": "assistant", "content": "기사가 없습니다🥲"})
             else:
                 # 뉴스 내용 전처리 및 벡터화
@@ -271,7 +256,6 @@ if user_input:
                 # 챗봇 형식의 응답 출력
                 st.session_state.messages.append({"role": "assistant", "content": answer})
 
-
                 # 제목, 날짜, 요약, 출처 출력
                 for title, summary, source, date in zip(titles, summaries, sources, dates):
                     combined_message = f"""
@@ -284,7 +268,6 @@ if user_input:
                         </div>
                     </div>
                     """
-
                     st.session_state.messages.append({"role": "assistant", "content": combined_message})
 
         except Exception as e:
