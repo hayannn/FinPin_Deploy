@@ -98,11 +98,15 @@ def extract_keyword(text):
 def extract_date(text):
     """
     입력된 텍스트에서 날짜를 추출합니다.
-    - "YYYY년 MM월 DD일", "MM월 DD일", "DD일" 등의 다양한 형식 지원
+    - "YYYY년 MM월 DD일", "MM월 DD일", "DD일", "오늘" 등의 다양한 형식 지원
     - 형식이 없으면 None 반환
     """
     today = datetime.today()
     
+    # "오늘" 처리
+    if "오늘" in text:
+        return today
+
     # 정규 표현식 패턴
     patterns = [
         (r"(\d{4})년 (\d{1,2})월 (\d{1,2})일", "%Y년 %m월 %d일"),  # YYYY년 MM월 DD일
