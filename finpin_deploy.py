@@ -93,7 +93,6 @@ def extract_keyword(text):
     else:
         return None
 
-
 # 날짜 추출 함수
 def extract_date(text):
     """
