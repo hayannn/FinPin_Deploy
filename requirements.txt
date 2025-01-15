@@ -4,7 +4,7 @@ langchain-community
 
 openai
 langchain-openai
-langchain_chroma
+langchain-chroma
 requests
 
 python-dotenv
