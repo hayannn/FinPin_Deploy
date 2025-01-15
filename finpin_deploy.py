@@ -1,21 +1,3 @@
-# 모델 설치 코드 우선 실행
-import subprocess
-
-# 모델 설치 코드 추가
-def install_models():
-    try:
-        # 설치할 spaCy 모델
-        spacy_model = "ko_core_news_sm"
-
-        # 설치 명령 실행
-        subprocess.check_call(["python", "-m", "spacy", "download", spacy_model])
-        print(f"{spacy_model} 설치 완료!")
-    except Exception as e:
-        print(f"모델 설치 중 오류 발생: {e}")
-
-# Streamlit 앱 실행 전에 모델 설치
-install_models()
-
 import streamlit as st
 from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
