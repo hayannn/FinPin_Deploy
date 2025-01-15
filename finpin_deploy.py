@@ -98,18 +98,25 @@ def extract_keyword(text):
 def extract_date(text):
     """
     입력된 텍스트에서 날짜를 추출합니다.
-    - "YYYY년 MM월 DD일", "MM월 DD일", "DD일" 등의 다양한 형식 지원
+    - "YYYY년 MM월 DD일", "MM월 DD일", "DD일", "오늘" 등의 다양한 형식 지원
     - 형식이 없으면 None 반환
     """
+    if not isinstance(text, str):  # text가 문자열인지 확인
+        return None
+
     today = datetime.today()
 
-    # 정규 표현식 패턴
+    # "오늘" 처리
+    if "오늘" in text:
+        return today
+
+    # 정규 표현식 패턴 (공백 처리 개선)
     patterns = [
-        (r"(\d{4})년 (\d{1,2})월 (\d{1,2})일", "%Y년 %m월 %d일"),  # YYYY년 MM월 DD일
-        (r"(\d{1,2})월 (\d{1,2})일", "%m월 %d일"),                # MM월 DD일
+        (r"(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일", "%Y년 %m월 %d일"),  # YYYY년 MM월 DD일
+        (r"(\d{1,2})월\s*(\d{1,2})일", "%m월 %d일"),                # MM월 DD일
         (r"(\d{1,2})일", "%d일")                                  # DD일
     ]
-
+    
     for pattern, date_format in patterns:
         match = re.search(pattern, text)
         if match:
@@ -125,9 +132,8 @@ def extract_date(text):
             except ValueError:
                 # 유효하지 않은 날짜일 경우 무시
                 continue
-
+    
     return None
-
 
 # HTML 태그를 제거하는 함수
 def clean_html(text):
