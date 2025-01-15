@@ -2,8 +2,6 @@ import requests
 import os
 import streamlit as st
 
-load_dotenv()
-
 NAVER_CLIENT_ID = st.secrets["NAVER_CLIENT_ID"]
 NAVER_CLIENT_SECRET = st.secrets["NAVER_CLIENT_SECRET"]
 
