@@ -105,6 +105,42 @@ predefined_keywords = [
 #     else:
 #         return None
 
+# 날짜 추출 함수
+def extract_date(text):
+    if not isinstance(text, str):
+        return None
+
+    today = datetime.today()
+
+    # "오늘" 처리
+    if "오늘" in text:
+        return today
+
+    # 정규 표현식 패턴 (공백 처리 개선)
+    patterns = [
+        (r"(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일", "%Y년 %m월 %d일"),  # YYYY년 MM월 DD일
+        (r"(\d{1,2})월\s*(\d{1,2})일", "%m월 %d일"),                # MM월 DD일
+        (r"(\d{1,2})일", "%d일")                                  # DD일
+    ]
+    
+    for pattern, date_format in patterns:
+        match = re.search(pattern, text)
+        if match:
+            try:
+                if date_format == "%d일":  # 날짜만 주어진 경우
+                    day = int(match.group(1))
+                    return today.replace(day=day)  # 이번 달의 해당 날짜 반환
+                elif date_format == "%m월 %d일":  # 월과 날짜만 주어진 경우
+                    month, day = map(int, match.groups())
+                    return today.replace(month=month, day=day)
+                else:  # YYYY년 MM월 DD일 형식
+                    return datetime.strptime(match.group(), date_format)
+            except ValueError:
+                continue
+    
+    return None
+
+
 # HTML 태그를 제거하는 함수
 def clean_html(text):
     """HTML 태그를 제거합니다."""
@@ -140,41 +176,6 @@ def extract_keywords(text):
     
     # 중복된 키워드 제거 후 합침
     return list(set(korean_keywords + english_keywords))
-
-# 날짜 추출 함수
-def extract_date(text):
-    if not isinstance(text, str):
-        return None
-
-    today = datetime.today()
-
-    # "오늘" 처리
-    if "오늘" in text:
-        return today
-
-    # 정규 표현식 패턴 (공백 처리 개선)
-    patterns = [
-        (r"(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일", "%Y년 %m월 %d일"),  # YYYY년 MM월 DD일
-        (r"(\d{1,2})월\s*(\d{1,2})일", "%m월 %d일"),                # MM월 DD일
-        (r"(\d{1,2})일", "%d일")                                  # DD일
-    ]
-    
-    for pattern, date_format in patterns:
-        match = re.search(pattern, text)
-        if match:
-            try:
-                if date_format == "%d일":  # 날짜만 주어진 경우
-                    day = int(match.group(1))
-                    return today.replace(day=day)  # 이번 달의 해당 날짜 반환
-                elif date_format == "%m월 %d일":  # 월과 날짜만 주어진 경우
-                    month, day = map(int, match.groups())
-                    return today.replace(month=month, day=day)
-                else:  # YYYY년 MM월 DD일 형식
-                    return datetime.strptime(match.group(), date_format)
-            except ValueError:
-                continue
-    
-    return None
 
 # 기사 내용을 청크로 나누는 함수
 def chunk_text(text, chunk_size=1000):
