@@ -11,7 +11,11 @@ requests
 python-dotenv
 beautifulsoup4
 
-spacy
+spacy>=3.0.0
+thinc==8.1.7
 https://github.com/explosion/spacy-models/releases/download/ko_core_news_sm-3.5.0/ko_core_news_sm-3.5.0-py3-none-any.whl
 
 pysqlite3-binary
+pip>=24.3.1
+setuptools>=65.5.0
+wheel>=0.41.0
