@@ -47,12 +47,12 @@ for msg in st.session_state.messages:
 user_input = st.chat_input("질문을 입력해주세요🙂(ex.2025년 1월 13일의 금융 뉴스를 알려줄래?, 최신 금융 동향을 알려줘, ...)")
 
 # spaCy 모델 로드 (한국어) -> streamlit cloud에서 배포 가능한 Korean Hugging Face BERT 모델로 변경하여 로드 (한국어 모델)
-# tokenizer = BertTokenizer.from_pretrained('monologg/kobert')
-# model = BertForTokenClassification.from_pretrained('monologg/kobert')
+tokenizer = BertTokenizer.from_pretrained('monologg/kobert')
+model = BertForTokenClassification.from_pretrained('monologg/kobert')
 
-# 영어 단어 인식이 잘 되지 않는 점을 보완하기 위해 다국어 모델로 변경 시도
-tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
-model = BertForTokenClassification.from_pretrained('bert-base-multilingual-cased')
+# 영어 단어 인식이 잘 되지 않는 점을 보완하기 위해 다국어 모델로 변경 시도 -> 성능이 더 떨어지는 이슈가 있었음)
+# tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
+# model = BertForTokenClassification.from_pretrained('bert-base-multilingual-cased')
 
 
 # 텍스트 분류 파이프라인 초기화
