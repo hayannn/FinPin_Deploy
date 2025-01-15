@@ -13,3 +13,4 @@ beautifulsoup4
 pysqlite3-binary
 transformers
 torch
+langid
